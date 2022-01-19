@@ -4,6 +4,7 @@ import helmet from 'helmet'
 import path from 'path'
 import config from './config'
 import connection from './connection'
+import errorHandler from './middleware/errorHandler'
 import routes from './routes'
 import { IUser } from './types/User'
 
@@ -32,4 +33,5 @@ app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`Server is running on port:${PORT}`)
   app.use('/', routes)
+  app.use(errorHandler)
 })

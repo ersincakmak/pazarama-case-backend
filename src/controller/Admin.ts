@@ -1,12 +1,13 @@
 /* eslint-disable class-methods-use-this */
-import { Request, Response } from 'express'
-import { DataResponse, MessageResponse } from '../model/Response'
+import { NextFunction, Request, Response } from 'express'
+import ApiError from '../model/Error'
+import { DataResponse } from '../model/Response'
 import FormService from '../service/FormService'
 import UserService from '../service/UserService'
 import { generateAccessToken, passwordToHash } from '../utils/helper'
 
 class AdminController {
-  public async register(req: Request, res: Response) {
+  public async register(req: Request, res: Response, next: NextFunction) {
     const payload = {
       ...req.body,
       password: passwordToHash(req.body.password),
@@ -18,21 +19,17 @@ class AdminController {
       })
 
       if (userExist)
-        return res
-          .status(403)
-          .json(new MessageResponse('An user exist with this username'))
+        return next(new ApiError('An user exist with this username', 403))
 
       await UserService.create(payload)
       const data = await UserService.findOne(payload)
       return res.status(200).json(new DataResponse(data))
     } catch (error) {
-      return res
-        .status(500)
-        .json(new MessageResponse('There is an error with register process.'))
+      return next(new ApiError('There is an error with registiration.'))
     }
   }
 
-  public async login(req: Request, res: Response) {
+  public async login(req: Request, res: Response, next: NextFunction) {
     const payload = {
       username: req.body.username,
       password: passwordToHash(req.body.password),
@@ -40,8 +37,7 @@ class AdminController {
 
     try {
       const data = await UserService.findOne(payload)
-      if (!data)
-        return res.status(404).json(new MessageResponse('Wrong credentials.'))
+      if (!data) return next(new ApiError('Wrong credentials.', 404))
 
       const response = {
         ...data.toObject(),
@@ -50,27 +46,25 @@ class AdminController {
 
       return res.status(200).json(new DataResponse(response))
     } catch (error) {
-      return res
-        .status(500)
-        .json(new MessageResponse('There is an error with login process.'))
+      return next('There is an error with login process.')
     }
   }
 
-  public async getApplications(_req: Request, res: Response) {
+  public async getApplications(
+    _req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const data = await FormService.list()
 
       return res.status(200).json(new DataResponse(data))
     } catch (error) {
-      return res
-        .status(500)
-        .json(
-          new MessageResponse('There is an error with getting applications.')
-        )
+      return next(new ApiError('There is an error with getting applications.'))
     }
   }
 
-  public async createAnswer(req: Request, res: Response) {
+  public async createAnswer(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params
     const { message } = req.body
 
@@ -87,21 +81,15 @@ class AdminController {
       })
 
       if (!data)
-        return res
-          .status(404)
-          .json(new MessageResponse('There is no application with this id.'))
+        return next(new ApiError('There is no application with this id.', 404))
 
       return res.status(200).json(new DataResponse(data))
     } catch (error) {
-      return res
-        .status(500)
-        .json(
-          new MessageResponse('There is an error with getting applications.')
-        )
+      return next(new ApiError('There is an error with creating answer.'))
     }
   }
 
-  public async updateStatus(req: Request, res: Response) {
+  public async updateStatus(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params
     const { status } = req.body
 
@@ -109,17 +97,11 @@ class AdminController {
       const data = await FormService.modify(id as any, { status })
 
       if (!data)
-        return res
-          .status(404)
-          .json(new MessageResponse('There is no application with this id.'))
+        return next(new ApiError('There is no application with this id.', 404))
 
       return res.status(200).json(new DataResponse(data))
     } catch (error) {
-      return res
-        .status(500)
-        .json(
-          new MessageResponse('There is an error with getting applications.')
-        )
+      return next(new ApiError('There is an error with updating status'))
     }
   }
 }

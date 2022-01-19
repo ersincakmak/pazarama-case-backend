@@ -1,13 +1,14 @@
 /* eslint-disable class-methods-use-this */
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { UploadedFile } from 'express-fileupload'
 import path from 'path'
 import { v4 } from 'uuid'
-import { DataResponse, MessageResponse } from '../model/Response'
+import ApiError from '../model/Error'
+import { DataResponse } from '../model/Response'
 import FormService from '../service/FormService'
 
 class FormController {
-  public async create(req: Request, res: Response) {
+  public async create(req: Request, res: Response, next: NextFunction) {
     const { answers, ...payload } = req.body
 
     const promises: Promise<void>[] = []
@@ -39,31 +40,21 @@ class FormController {
       })
       res.status(200).json(new DataResponse(data))
     } catch (error) {
-      res
-        .status(500)
-        .json(
-          new MessageResponse('There is an error with creatign application.')
-        )
+      next(new ApiError('There is an error with creatign application.'))
     }
   }
 
-  public async getById(req: Request, res: Response) {
+  public async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params
       const data = await FormService.findOne({ _id: id })
 
       if (!data)
-        return res
-          .status(404)
-          .json(new MessageResponse('There is no application with this id.'))
+        return next(new ApiError('There is no application with this id', 404))
 
       return res.status(200).json(new DataResponse(data))
     } catch (error) {
-      return res
-        .status(500)
-        .json(
-          new MessageResponse('There is an error with finding application.')
-        )
+      return next('There is an error with finding application.')
     }
   }
 }
