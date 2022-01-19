@@ -1,10 +1,12 @@
 import express from 'express'
 import helmet from 'helmet'
 import config from './config'
+import connection from './connection'
 
 const app = express()
 
 config()
+connection()
 
 app.use(express.json())
 app.use(helmet())
