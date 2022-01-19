@@ -51,11 +51,30 @@ class FormController {
       })
       res.status(200).json(new DataResponse(data))
     } catch (error) {
-      console.log(error)
       res
         .status(500)
         .json(
           new MessageResponse('There is an error with creatign application.')
+        )
+    }
+  }
+
+  public async getById(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const data = await FormService.findOne({ _id: id })
+
+      if (!data)
+        return res
+          .status(404)
+          .json(new MessageResponse('There is no application with this id.'))
+
+      return res.status(200).json(new DataResponse(data))
+    } catch (error) {
+      return res
+        .status(500)
+        .json(
+          new MessageResponse('There is an error with finding application.')
         )
     }
   }
