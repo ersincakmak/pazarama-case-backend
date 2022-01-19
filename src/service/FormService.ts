@@ -19,7 +19,7 @@ class FormService extends BaseService<IForm> {
   }
 
   modify(id: Types.ObjectId, options: FilterQuery<IForm>) {
-    return this.Model.findOneAndUpdate(id, options, { new: true }).populate({
+    return this.Model.findByIdAndUpdate(id, options, { new: true }).populate({
       path: 'answers',
       populate: {
         path: 'author',
