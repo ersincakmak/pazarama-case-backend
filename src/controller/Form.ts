@@ -18,26 +18,14 @@ class FormController {
       if (files.length > 1) {
         files.forEach((item) => {
           const fileName = `${v4()}_${item.name}`
-          const filePath = path.join(
-            __dirname,
-            '../',
-            'uploads',
-            'users',
-            fileName
-          )
+          const filePath = path.join(__dirname, '../', 'uploads', fileName)
           promises.push(item.mv(filePath))
           fileNames.push(fileName)
         })
       } else {
         const file = req.files.files as UploadedFile
         const fileName = `${v4()}_${file.name}`
-        const filePath = path.join(
-          __dirname,
-          '../',
-          'uploads',
-          'users',
-          fileName
-        )
+        const filePath = path.join(__dirname, '../', 'uploads', fileName)
         promises.push(file.mv(filePath))
         fileNames.push(fileName)
       }

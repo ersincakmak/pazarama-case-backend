@@ -1,6 +1,7 @@
 import express from 'express'
 import helmet from 'helmet'
 import fileupload from 'express-fileupload'
+import path from 'path'
 import config from './config'
 import connection from './connection'
 import routes from './routes'
@@ -17,6 +18,7 @@ app.use(
     createParentPath: true,
   })
 )
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 const PORT = process.env.PORT || 4000
 app.listen(PORT, () => {
