@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { Request, Response } from 'express'
 import { DataResponse, MessageResponse } from '../model/Response'
+import FormService from '../service/FormService'
 import UserService from '../service/UserService'
 import { generateAccessToken, passwordToHash } from '../utils/helper'
 
@@ -52,6 +53,20 @@ class AdminController {
       return res
         .status(500)
         .json(new MessageResponse('There is an error with login process.'))
+    }
+  }
+
+  public async getApplications(_req: Request, res: Response) {
+    try {
+      const data = await FormService.list()
+
+      return res.status(200).json(new DataResponse(data))
+    } catch (error) {
+      return res
+        .status(500)
+        .json(
+          new MessageResponse('There is an error with getting applications.')
+        )
     }
   }
 }
