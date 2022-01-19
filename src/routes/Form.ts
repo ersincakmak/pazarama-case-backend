@@ -1,7 +1,7 @@
 import express from 'express'
 import FormController from '../controller/Form'
 import validate from '../middleware/validate'
-import createFormSchema from '../validation/From'
+import { createFormSchema } from '../validation/From'
 
 const formRouter = express.Router()
 

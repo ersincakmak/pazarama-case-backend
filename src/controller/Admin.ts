@@ -69,6 +69,37 @@ class AdminController {
         )
     }
   }
+
+  public async createAnswer(req: Request, res: Response) {
+    const { id } = req.params
+    const { message } = req.body
+
+    const payload = {
+      // @ts-ignore
+      // eslint-disable-next-line no-underscore-dangle
+      author: req.user._id,
+      message,
+    }
+
+    try {
+      const data = await FormService.modify(id as any, {
+        $push: { answers: payload },
+      })
+
+      if (!data)
+        return res
+          .status(404)
+          .json(new MessageResponse('There is no application with this id.'))
+
+      return res.status(200).json(new DataResponse(data))
+    } catch (error) {
+      return res
+        .status(500)
+        .json(
+          new MessageResponse('There is an error with getting applications.')
+        )
+    }
+  }
 }
 
 export default new AdminController()

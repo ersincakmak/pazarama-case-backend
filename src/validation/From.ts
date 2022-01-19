@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-const createFormSchema = yup.object().shape({
+export const createFormSchema = yup.object().shape({
   firstName: yup.string().required().label('Name'),
   lastName: yup.string().required().label('Last Name'),
   age: yup.number().required().label('Age'),
@@ -13,4 +13,6 @@ const createFormSchema = yup.object().shape({
   address: yup.string().required().label('Address'),
 })
 
-export default createFormSchema
+export const createAnserSchema = yup.object().shape({
+  message: yup.string().min(5).required().label('Message'),
+})

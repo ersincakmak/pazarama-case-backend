@@ -3,6 +3,7 @@ import AdminController from '../controller/Admin'
 import authenticate from '../middleware/authenticate'
 import validate from '../middleware/validate'
 import { loginSchema, registerSchema } from '../validation/Admin'
+import { createAnserSchema } from '../validation/From'
 
 const adminRouter = express.Router()
 
@@ -15,5 +16,9 @@ adminRouter.route('/login').post(validate(loginSchema), AdminController.login)
 adminRouter
   .route('/applications')
   .get(authenticate, AdminController.getApplications)
+
+adminRouter
+  .route('/application/create-answer/:id')
+  .post(authenticate, validate(createAnserSchema), AdminController.createAnswer)
 
 export default adminRouter
