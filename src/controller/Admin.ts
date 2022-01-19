@@ -100,6 +100,28 @@ class AdminController {
         )
     }
   }
+
+  public async updateStatus(req: Request, res: Response) {
+    const { id } = req.params
+    const { status } = req.body
+
+    try {
+      const data = await FormService.modify(id as any, { status })
+
+      if (!data)
+        return res
+          .status(404)
+          .json(new MessageResponse('There is no application with this id.'))
+
+      return res.status(200).json(new DataResponse(data))
+    } catch (error) {
+      return res
+        .status(500)
+        .json(
+          new MessageResponse('There is an error with getting applications.')
+        )
+    }
+  }
 }
 
 export default new AdminController()

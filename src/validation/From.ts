@@ -16,3 +16,11 @@ export const createFormSchema = yup.object().shape({
 export const createAnserSchema = yup.object().shape({
   message: yup.string().min(5).required().label('Message'),
 })
+
+export const updateStatusSchema = yup.object().shape({
+  status: yup
+    .string()
+    .required()
+    .oneOf(['waiting', 'rejected', 'solved'])
+    .label('Status'),
+})
