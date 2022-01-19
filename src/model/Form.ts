@@ -31,23 +31,22 @@ const formSchema = new mongoose.Schema(
       type: [String],
       required: false,
     },
-    // when i create user model i will remove these comment lines
-    // answers: {
-    //   type: [
-    //     {
-    //       message: {
-    //         type: String,
-    //         required: true,
-    //       },
-    //       author: {
-    //         type: mongoose.Types.ObjectId,
-    //         required: true,
-    //         ref: 'user',
-    //       },
-    //     },
-    //   ],
-    //   required: false,
-    // },
+    answers: {
+      type: [
+        {
+          message: {
+            type: String,
+            required: true,
+          },
+          author: {
+            type: mongoose.Types.ObjectId,
+            required: true,
+            ref: 'user',
+          },
+        },
+      ],
+      required: false,
+    },
     status: {
       type: String,
       default: 'waiting',
