@@ -1,6 +1,6 @@
-import { Document, ObjectId } from 'mongoose'
+import { ObjectId } from 'mongoose'
 
-export interface IForm extends Document {
+export interface IForm {
   _id: ObjectId
   status: 'waiting' | 'solved' | 'rejected'
   name: string
