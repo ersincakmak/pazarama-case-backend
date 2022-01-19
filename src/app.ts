@@ -1,10 +1,17 @@
 import express from 'express'
-import helmet from 'helmet'
 import fileupload from 'express-fileupload'
+import helmet from 'helmet'
 import path from 'path'
 import config from './config'
 import connection from './connection'
 import routes from './routes'
+import { IUser } from './types/User'
+
+declare module 'express' {
+  export interface Request {
+    user?: IUser
+  }
+}
 
 const app = express()
 
