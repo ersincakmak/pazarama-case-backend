@@ -2,6 +2,7 @@ import express from 'express'
 import fileupload from 'express-fileupload'
 import helmet from 'helmet'
 import path from 'path'
+import cors from 'cors'
 import config from './config'
 import connection from './connection'
 import errorHandler from './middleware/errorHandler'
@@ -27,6 +28,11 @@ app.use(
   })
 )
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+app.use(
+  cors({
+    allowedHeaders: ['http://localhost:3000'],
+  })
+)
 
 const PORT = process.env.PORT || 4000
 app.listen(PORT, () => {
