@@ -30,7 +30,10 @@ app.use(
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: [
+      'http://localhost:3000',
+      'https://pazarama-case-ersincakmak.netlify.app/',
+    ],
   })
 )
 
