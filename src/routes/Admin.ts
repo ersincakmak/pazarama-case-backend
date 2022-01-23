@@ -29,4 +29,6 @@ adminRouter
     AdminController.updateStatus
   )
 
+adminRouter.route('/getMe').get(authenticate, AdminController.getMe)
+
 export default adminRouter

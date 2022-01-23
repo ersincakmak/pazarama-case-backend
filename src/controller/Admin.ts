@@ -104,6 +104,10 @@ class AdminController {
       return next(new ApiError('There is an error with updating status'))
     }
   }
+
+  public async getMe(req: Request, res: Response) {
+    res.status(200).json(new DataResponse(req.user))
+  }
 }
 
 export default new AdminController()
